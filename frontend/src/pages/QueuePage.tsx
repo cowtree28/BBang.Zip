@@ -24,7 +24,7 @@ export function QueuePage() {
   };
 
   useEffect(() => {
-    const eventSource = new EventSource(`http://localhost:8084/api/v1/queue/${queueId}/stream?userId=${userId}`);
+    const eventSource = new EventSource(`http://localhost:8080/api/v1/queue/${queueId}/stream?userId=${userId}`);
     eventSource.onmessage = (event) => {
       const next = JSON.parse(event.data) as QueueState;
       setState(next);

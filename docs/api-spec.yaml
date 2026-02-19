@@ -1,142 +1,91 @@
 openapi: 3.0.3
 info:
   title: BBang.Zip API
-  version: 0.2.0
+  version: 0.3.0
 servers:
-  - url: http://localhost:8081/api/v1
-  - url: http://localhost:8082/api/v1
-  - url: http://localhost:8083/api/v1
-  - url: http://localhost:8084/api/v1
+  - url: http://localhost:8080/api/v1
 paths:
   /auth/check-username:
     get:
       summary: 아이디 중복 확인
-      parameters:
-        - in: query
-          name: username
-          required: true
-          schema: { type: string }
-      responses:
-        '200': { description: ok }
+      responses: {'200': {description: ok}}
   /auth/signup:
     post:
       summary: 회원가입
-      responses:
-        '201': { description: created }
+      responses: {'201': {description: created}}
   /auth/login:
     post:
       summary: 로그인
-      responses:
-        '200': { description: token issued }
+      responses: {'200': {description: ok}}
   /auth/refresh:
     post:
       summary: 토큰 재발급
-      responses:
-        '200': { description: refreshed }
+      responses: {'200': {description: ok}}
   /users/me:
     get:
       summary: 내 정보 조회
-      responses:
-        '200': { description: ok }
+      responses: {'200': {description: ok}}
     patch:
       summary: 내 정보 수정
-      responses:
-        '200': { description: updated }
+      responses: {'200': {description: updated}}
   /products:
     get:
       summary: 상품 목록
-      responses:
-        '200': { description: ok }
+      responses: {'200': {description: ok}}
     post:
       summary: 상품 등록
-      responses:
-        '201': { description: created }
+      responses: {'201': {description: created}}
   /products/{productId}:
     get:
       summary: 상품 상세
-      parameters:
-        - in: path
-          name: productId
-          required: true
-          schema: { type: integer }
-      responses:
-        '200': { description: ok }
-        '404': { description: not found }
+      responses: {'200': {description: ok}, '404': {description: not found}}
     patch:
       summary: 상품 수정
-      responses:
-        '200': { description: updated }
+      responses: {'200': {description: updated}}
     delete:
       summary: 상품 삭제
-      responses:
-        '204': { description: deleted }
+      responses: {'204': {description: deleted}}
   /orders:
     post:
-      summary: 주문 생성
-      responses:
-        '201': { description: created }
+      summary: 주문 생성(Product/Queue 서비스 연동)
+      responses: {'201': {description: created}}
   /orders/{orderId}:
     get:
-      summary: 주문 단건
-      parameters:
-        - in: path
-          name: orderId
-          required: true
-          schema: { type: string }
-      responses:
-        '200': { description: ok }
+      summary: 주문 단건 조회
+      responses: {'200': {description: ok}}
   /users/me/orders:
     get:
       summary: 내 주문 목록
-      responses:
-        '200': { description: ok }
+      responses: {'200': {description: ok}}
   /payments:
     post:
       summary: 결제 요청
-      responses:
-        '201': { description: created }
+      responses: {'201': {description: created}}
   /payments/{paymentId}:
     get:
       summary: 결제 상태 조회
-      parameters:
-        - in: path
-          name: paymentId
-          required: true
-          schema: { type: string }
-      responses:
-        '200': { description: ok }
+      responses: {'200': {description: ok}}
   /queue/enroll:
     post:
       summary: 대기열 등록
-      responses:
-        '201': { description: created }
+      responses: {'201': {description: created}}
   /queue/{queueId}:
     get:
       summary: 대기열 순번 조회
-      parameters:
-        - in: path
-          name: queueId
-          required: true
-          schema: { type: string }
-      responses:
-        '200': { description: ok }
+      responses: {'200': {description: ok}}
   /queue/{queueId}/leave:
     post:
       summary: 대기열 이탈
-      responses:
-        '200': { description: ok }
+      responses: {'200': {description: ok}}
   /queue/{queueId}/promote:
     post:
-      summary: 다음 사용자 승급
-      responses:
-        '200': { description: ok }
+      summary: 대기열 승급
+      responses: {'200': {description: ok}}
   /queue/{queueId}/snapshot:
     get:
       summary: 대기열 스냅샷
-      responses:
-        '200': { description: ok }
+      responses: {'200': {description: ok}}
   /queue/{queueId}/stream:
     get:
-      summary: 실시간 스트림 (SSE)
-      responses:
-        '200': { description: stream }
+      summary: 대기열 실시간 스트림
+      responses: {'200': {description: stream}}

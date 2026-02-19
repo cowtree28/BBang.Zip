@@ -6,7 +6,7 @@ export function MyPage() {
   useEffect(() => {
     const userId = localStorage.getItem('userId');
     if (!userId) return;
-    fetch('http://localhost:8081/api/v1/users/me', { headers: { 'X-User-Id': userId } })
+    fetch('http://localhost:8080/api/v1/users/me', { headers: { 'X-User-Id': userId } })
       .then((res) => res.json())
       .then(setProfile);
   }, []);

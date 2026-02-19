@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,15 +22,34 @@ public class OrderController {
 
     private static final AtomicLong ID_SEQUENCE = new AtomicLong(1000);
     private static final Map<String, Order> ORDERS = new ConcurrentHashMap<>();
+    private final OrderIntegrationService integrationService;
+
+    public OrderController(OrderIntegrationService integrationService) {
+        this.integrationService = integrationService;
+    }
 
     @PostMapping("/orders")
     @ResponseStatus(HttpStatus.CREATED)
-    public Order create(@RequestHeader("X-User-Id") String userId, @Valid @RequestBody CreateOrderRequest request) {
+    public Map<String, Object> create(@RequestHeader("X-User-Id") String userId, @Valid @RequestBody CreateOrderRequest request) {
+        Map product = integrationService.fetchProduct(request.productId());
+        if (product == null || product.get("id") == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 상품입니다.");
+        }
+
         String orderId = "ORD-" + ID_SEQUENCE.incrementAndGet();
         Order order = new Order(orderId, userId, request.productId(), request.productName(), request.quantity(), request.priceSnapshot(),
                 request.pickupLocation(), OffsetDateTime.now().plusHours(2), "WAITING_PAYMENT");
         ORDERS.put(orderId, order);
-        return order;
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("order", order);
+        response.put("productName", product.get("name"));
+
+        if (request.quantity() >= 3) {
+            String queueId = "product-" + request.productId();
+            response.put("queue", integrationService.enrollQueueIfNeeded(userId, queueId));
+        }
+        return response;
     }
 
     @GetMapping("/orders/{orderId}")
