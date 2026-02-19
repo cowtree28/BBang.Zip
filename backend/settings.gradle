@@ -1,0 +1,2 @@
+rootProject.name = 'bbangzip-backend'
+include 'services:auth-service', 'services:product-service', 'services:order-service', 'services:queue-service'

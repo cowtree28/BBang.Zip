@@ -1,0 +1,33 @@
+:root {
+  font-family: Inter, system-ui, sans-serif;
+}
+body {
+  margin: 0;
+  background: #faf7f1;
+  color: #2d2d2d;
+}
+.layout {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav {
+  display: flex;
+  gap: 12px;
+}
+a {
+  text-decoration: none;
+  color: #6a3e11;
+  font-weight: 700;
+}
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e7dccd;
+}
